@@ -1,9 +1,6 @@
 package com.AA.androidcodingchallenge
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Environment
-import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -14,7 +11,6 @@ import androidx.compose.ui.Modifier
 import com.AA.androidcodingchallenge.Utils.ImageViewModel
 import com.AA.androidcodingchallenge.Utils.Navigation
 import com.AA.androidcodingchallenge.ui.theme.AndroidCodingChallengeTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

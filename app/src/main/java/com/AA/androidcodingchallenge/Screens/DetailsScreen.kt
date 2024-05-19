@@ -41,7 +41,6 @@ import com.AA.androidcodingchallenge.Models.ImageItem
 import com.AA.androidcodingchallenge.Utils.ImageViewModel
 import com.AA.androidcodingchallenge.Utils.tags
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun detailsScreen(
@@ -49,6 +48,11 @@ fun detailsScreen(
     navController: NavController,
     viewModel: ImageViewModel
 ) {
+    if (id == null || id == "0") {
+        Text(text = "ID not found")
+        return
+    }
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -85,15 +89,10 @@ fun detailsScreen(
 
 @Composable
 fun content(
-    id: String?,
+    id: String,
     viewModel: ImageViewModel,
     modifier: Modifier = Modifier
 ) {
-    if (id == null || id == "0") {
-        Text(text = "ID not found")
-        return
-    }
-
     val item: ImageItem = viewModel.imageList.find { it.id == id } ?: return Text(text = "ID not found")
 
     val scrollState = rememberScrollState()

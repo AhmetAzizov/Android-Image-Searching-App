@@ -12,8 +12,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.AA.androidcodingchallenge.Models.ImageItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 // Composable for Image Tags
@@ -39,18 +37,15 @@ fun tags(
                 shape = RoundedCornerShape(16.dp),
                 onClick = {
                     coroutineScope.launch {
-                        val searchQueryArray = it.trim().split(' ')
+//                        val searchQueryArray = it.trim().split(' ')
+//
+//                        val searchQuery = buildString {
+//                            searchQueryArray.forEach {
+//                                append("+$it")
+//                            }
+//                        }
 
-                        val searchQuery = buildString {
-                            searchQueryArray.forEach {
-                                append("+$it")
-                            }
-                        }
-
-                        if(viewModel.searchHistory.isEmpty() || viewModel.searchHistory.first() != searchQuery) {
-                            viewModel.searchHistory.addFirst(searchQuery)
-                            viewModel.parseJSON(searchQuery)
-                        }
+                        handleSearchHistory(it, viewModel)
 
                         viewModel.scrollToTop()
                         viewModel.searchText = it

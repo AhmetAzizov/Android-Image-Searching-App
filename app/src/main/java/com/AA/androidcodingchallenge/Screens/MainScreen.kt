@@ -31,7 +31,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,9 +52,8 @@ import coil.request.ImageRequest
 import com.AA.androidcodingchallenge.Models.ImageItem
 import com.AA.androidcodingchallenge.Utils.ImageViewModel
 import com.AA.androidcodingchallenge.Utils.Screen
+import com.AA.androidcodingchallenge.Utils.handleSearchHistory
 import com.AA.androidcodingchallenge.Utils.tags
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -157,8 +155,6 @@ fun searchBar(
     var active by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
 
-    val coroutineScope = rememberCoroutineScope()
-
     SearchBar(
         modifier = modifier
             .background(Color.Transparent)
@@ -170,25 +166,12 @@ fun searchBar(
         },
         onSearch = { query ->
             enabled = false
-            val searchQueryArray = query.trim().split(' ')
 
-            val searchQuery = buildString {
-                searchQueryArray.forEach {
-                    append("+$it")
-                }
-            }
+            handleSearchHistory(query, viewModel)
 
-            // Appends a new item to search history if it isn't empty or same as the previous query
-            coroutineScope.launch {
-                if(viewModel.searchHistory.isEmpty() || viewModel.searchHistory.first() != searchQuery.trim()) {
-                    viewModel.searchHistory.addFirst(searchQuery)
-                    viewModel.parseJSON(searchQuery)
-                }
-
-                viewModel.scrollToTop()
-                active = false
-                enabled = true
-            }
+            viewModel.scrollToTop()
+            active = false
+            enabled = true
         },
         active = active,
         onActiveChange = {
@@ -233,14 +216,12 @@ fun searchBar(
                         .clickable {
                             enabled = false
                             viewModel.searchText = parsedHistoryItem
-                            coroutineScope.launch {
-                                if (viewModel.searchHistory.first() != it) {
-                                    viewModel.parseJSON(it)
-                                }
-                                viewModel.scrollToTop()
-                                enabled = true
-                                active = false
-                            }
+
+                            handleSearchHistory(parsedHistoryItem, viewModel)
+
+                            viewModel.scrollToTop()
+                            enabled = true
+                            active = false
                         },
                 ) {
                     Icon(
@@ -255,14 +236,6 @@ fun searchBar(
         }
     }
 }
-
-//fun checkHistory(query: String, searchHistory: ArrayDeque<String>) {
-//    searchHistory.forEachIndexed { index, s ->
-//        if(query == s) {
-//
-//        }
-//    }
-//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -350,6 +323,7 @@ fun itemsList(
     }
 }
 
+// composable to show when there is no connection
 @Composable
 fun noInternet() {
     Box(
