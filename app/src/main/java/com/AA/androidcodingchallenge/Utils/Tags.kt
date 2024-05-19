@@ -16,10 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-/*
-    Separate File for tags composable
- */
+// Composable for Image Tags
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun tags(

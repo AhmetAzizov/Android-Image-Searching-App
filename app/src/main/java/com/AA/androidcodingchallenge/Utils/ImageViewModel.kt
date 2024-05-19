@@ -30,15 +30,17 @@ class ImageViewModel: ViewModel() {
     var noConnection by mutableStateOf(false)
     var searchHistory by mutableStateOf(ArrayDeque<String>())
 
+    private val scope = viewModelScope
+
     init {
-        viewModelScope.launch {
+        scope.launch {
             parseJSON("fruits")
             loading = false
         }
     }
 
     fun scrollToTop() {
-        CoroutineScope(Dispatchers.Main).launch {
+        scope.launch {
             listState.scrollToItem(0)
         }
     }
