@@ -161,8 +161,10 @@ fun searchBar(
 
     SearchBar(
         modifier = modifier
-            .background(Color.Transparent),
+            .background(Color.Transparent)
+            .padding(bottom = 6.dp),
         query = viewModel.searchText,
+        shape = RoundedCornerShape(20.dp),
         onQueryChange = {
             viewModel.searchText = it
         },
@@ -176,6 +178,7 @@ fun searchBar(
                 }
             }
 
+            // Appends a new item to search history if it isn't empty or same as the previous query
             coroutineScope.launch {
                 if(viewModel.searchHistory.isEmpty() || viewModel.searchHistory.first() != searchQuery.trim()) {
                     viewModel.searchHistory.addFirst(searchQuery)
@@ -198,7 +201,7 @@ fun searchBar(
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
         },
-        trailingIcon = {
+        trailingIcon = { // shows loading icon depending on the search bar state
             if(!enabled) {
                 loadingScreen(
                     contentAlignment = Alignment.CenterEnd
@@ -218,6 +221,7 @@ fun searchBar(
             }
         }
     ) {
+        // LazyColumn for showing the list of search history
         LazyColumn {
             items(viewModel.searchHistory) {
                 val parsedHistoryItem = it.replace('+', ' ').trim()
@@ -252,6 +256,13 @@ fun searchBar(
     }
 }
 
+//fun checkHistory(query: String, searchHistory: ArrayDeque<String>) {
+//    searchHistory.forEachIndexed { index, s ->
+//        if(query == s) {
+//
+//        }
+//    }
+//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -326,9 +337,7 @@ fun itemsList(
     ) {
         items(
             viewModel.imageList,
-            key = {
-                it.id
-            }
+            key = { it.id }
         ) {
             itemCard(
                 username = it.username,
