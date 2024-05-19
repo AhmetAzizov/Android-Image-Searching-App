@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.AA.androidcodingchallenge.Models.ImageItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,7 @@ class ImageViewModel: ViewModel() {
     var searchHistory by mutableStateOf(ArrayDeque<String>())
 
     init {
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
             parseJSON("fruits")
             loading = false
         }

@@ -31,9 +31,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -101,16 +103,16 @@ fun MainScreen(
             )
         }
     ) {
-        if(viewModel.noConnection) {
+        if(viewModel.noConnection) { // information text will be shown if there is no internet connection
             noInternet()
         } else {
-            if(viewModel.loading) {
+            if(viewModel.loading) { // a progress indicator will be shown if data is be loaded
                 loadingScreen(
                     modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
+                        .fillMaxSize()
+                        .padding(it)
                 )
-            } else if(viewModel.imageList.isEmpty()) {
+            } else if(viewModel.imageList.isEmpty()) { // information text will be shown if there are no images matching the query
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -151,9 +153,12 @@ fun searchBar(
     viewModel: ImageViewModel,
     modifier: Modifier = Modifier
 ) {
+    // search bar state variables
     var active by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
-    
+
+    val coroutineScope = rememberCoroutineScope()
+
     SearchBar(
         modifier = modifier
             .background(Color.Transparent),
@@ -171,8 +176,7 @@ fun searchBar(
                 }
             }
 
-            CoroutineScope(Dispatchers.IO).launch {
-
+            coroutineScope.launch {
                 if(viewModel.searchHistory.isEmpty() || viewModel.searchHistory.first() != searchQuery.trim()) {
                     viewModel.searchHistory.addFirst(searchQuery)
                     viewModel.parseJSON(searchQuery)
@@ -225,7 +229,7 @@ fun searchBar(
                         .clickable {
                             enabled = false
                             viewModel.searchText = parsedHistoryItem
-                            CoroutineScope(Dispatchers.IO).launch {
+                            coroutineScope.launch {
                                 if (viewModel.searchHistory.first() != it) {
                                     viewModel.parseJSON(it)
                                 }

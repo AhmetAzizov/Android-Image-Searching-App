@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel by viewModels<ImageViewModel>()
+            val viewModel by viewModels<ImageViewModel>() // viewModel initialization
 
             AndroidCodingChallengeTheme {
                 Surface(
@@ -31,12 +31,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    fun putImage(id: String) {
-        val shre = PreferenceManager.getDefaultSharedPreferences(this)
-        val edit: SharedPreferences.Editor = shre.edit()
-        edit.putString("imagepath", "/${Environment.getExternalStorageDirectory()}/$id.jpeg")
-        edit.commit()
     }
 }

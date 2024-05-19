@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.AA.androidcodingchallenge.Models.ImageItem
@@ -16,6 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
+/*
+    Separate File for tags composable
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun tags(
@@ -24,6 +28,8 @@ fun tags(
     item: ImageItem
 ) {
     val tagsArray = item.tags
+
+    val coroutineScope = rememberCoroutineScope()
 
     FlowRow(
         modifier = modifier
@@ -35,7 +41,7 @@ fun tags(
                     .padding(end = 4.dp),
                 shape = RoundedCornerShape(16.dp),
                 onClick = {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    coroutineScope.launch {
                         val searchQueryArray = it.trim().split(' ')
 
                         val searchQuery = buildString {
