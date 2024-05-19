@@ -1,4 +1,4 @@
-package com.AA.androidcodingchallenge
+package com.AA.androidcodingchallenge.Utils
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -6,7 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-
+import com.AA.androidcodingchallenge.Screens.MainScreen
+import com.AA.androidcodingchallenge.Screens.detailsScreen
 
 @Composable
 fun Navigation(
@@ -27,7 +28,11 @@ fun Navigation(
                     defaultValue = "0"
                 })
         ){ entry ->
-            DetailsScreen(id = entry.arguments?.getString("item"))
+            detailsScreen(
+                id = entry.arguments?.getString("item"),
+                navController = navController,
+                viewModel = viewModel
+            )
         }
     }
 }
