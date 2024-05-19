@@ -1,6 +1,6 @@
 package com.AA.androidcodingchallenge.Utils
 
-fun handleSearchHistory(query: String, viewModel: ImageViewModel) {
+suspend fun handleSearchHistory(query: String, viewModel: ImageViewModel) {
     val searchQueryArray = query.trim().split(' ')
 
     val searchQuery = buildString {
@@ -26,5 +26,6 @@ fun handleSearchHistory(query: String, viewModel: ImageViewModel) {
     }
 
     array.addFirst(searchQuery)
+    viewModel.parseJSON(searchQuery)
     viewModel.searchHistory = array
 }

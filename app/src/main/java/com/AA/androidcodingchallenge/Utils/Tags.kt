@@ -37,16 +37,7 @@ fun tags(
                 shape = RoundedCornerShape(16.dp),
                 onClick = {
                     coroutineScope.launch {
-//                        val searchQueryArray = it.trim().split(' ')
-//
-//                        val searchQuery = buildString {
-//                            searchQueryArray.forEach {
-//                                append("+$it")
-//                            }
-//                        }
-
                         handleSearchHistory(it, viewModel)
-
                         viewModel.scrollToTop()
                         viewModel.searchText = it
                     }

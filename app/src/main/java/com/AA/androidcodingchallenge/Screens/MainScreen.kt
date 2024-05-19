@@ -154,6 +154,7 @@ fun searchBar(
     // search bar state variables
     var active by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
 
     SearchBar(
         modifier = modifier
@@ -167,11 +168,12 @@ fun searchBar(
         onSearch = { query ->
             enabled = false
 
-            handleSearchHistory(query, viewModel)
-
-            viewModel.scrollToTop()
-            active = false
-            enabled = true
+            scope.launch {
+                handleSearchHistory(query, viewModel)
+                viewModel.scrollToTop()
+                active = false
+                enabled = true
+            }
         },
         active = active,
         onActiveChange = {
@@ -217,11 +219,12 @@ fun searchBar(
                             enabled = false
                             viewModel.searchText = parsedHistoryItem
 
-                            handleSearchHistory(parsedHistoryItem, viewModel)
-
-                            viewModel.scrollToTop()
-                            enabled = true
-                            active = false
+                            scope.launch {
+                                handleSearchHistory(parsedHistoryItem, viewModel)
+                                viewModel.scrollToTop()
+                                enabled = true
+                                active = false
+                            }
                         },
                 ) {
                     Icon(

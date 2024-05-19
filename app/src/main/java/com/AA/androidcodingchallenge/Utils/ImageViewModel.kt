@@ -1,6 +1,5 @@
 package com.AA.androidcodingchallenge.Utils
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import com.AA.androidcodingchallenge.BuildConfig
 import androidx.compose.runtime.getValue
@@ -9,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.AA.androidcodingchallenge.Models.ImageItem
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,19 +28,16 @@ class ImageViewModel: ViewModel() {
     var noConnection by mutableStateOf(false)
     var searchHistory by mutableStateOf(ArrayDeque<String>())
 
-    private val scope = viewModelScope
 
     init {
-        scope.launch {
+        viewModelScope.launch {
             parseJSON("fruits")
             loading = false
         }
     }
 
-    fun scrollToTop() {
-        scope.launch {
-            listState.scrollToItem(0)
-        }
+    suspend fun scrollToTop() {
+        listState.scrollToItem(0)
     }
 
     suspend fun parseJSON(query: String) {
